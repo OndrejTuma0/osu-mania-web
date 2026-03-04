@@ -31,7 +31,7 @@ const circleColorPressed = "rgba(214, 111, 228, 0.81)"
 const outlineColor = "rgb(80, 8, 76)"
 
 // settings
-const noteSpeed = 15
+let noteSpeed = 10
 
 const ASKL = [
     { x: 100, y: 850, radius: 45, color: circleColor},
@@ -188,6 +188,7 @@ document.getElementById("generate").addEventListener("click", () => {
 })
 
 document.getElementById("pause").addEventListener("click", () => {
+    document.getElementById("pause").textContent = stopped ? "Pause" : "Play"
     stopped = !stopped
     animate()
 })
