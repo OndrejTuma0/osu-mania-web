@@ -1,0 +1,58 @@
+html {
+    background-color: rgb(44, 44, 44);
+}
+
+body {
+    margin: 0;
+}
+
+#game {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    background-color: rgb(158, 158, 158);
+    border-radius: 10px;
+    border: solid 4px rgb(83, 73, 73);
+}
+
+.stats {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    left: 5%;
+    bottom: 50%;
+    gap: 5px;
+}
+
+#score {
+    color: white;
+    font-size: 56px;
+}
+
+#combo {
+    position: absolute;
+    color: white;
+    font-size: 80px;
+    right: 25%;
+    bottom: 50%;
+}
+
+#misses {
+    color: white;
+    font-size: 32px;
+}
+
+#highestcombo {
+    color: white;
+    font-size: 32px;
+}
+
+#accuracy {
+    color: white;
+    font-size: 32px;
+}
+
+#grade {
+    color: white;
+    font-size: 32px;
+}
