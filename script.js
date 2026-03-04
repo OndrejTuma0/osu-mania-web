@@ -23,6 +23,8 @@ let hitNotes = 0 // perfect: 1, good: 0.75
 let missedNotes = 0
 let totalNotes = 0
 
+stopped = false
+
 // colors
 const circleColor = "rgba(166, 47, 182, 0.55)"
 const circleColorPressed = "rgba(214, 111, 228, 0.81)"
@@ -81,8 +83,11 @@ function checkHit(key) {
     let nearestDist = Infinity
     for (let i = 0; i < noteMap.length; i++) {
         const n = noteMap[i]
+
         if (n.key !== key) continue
+
         const dist = Math.abs(n.y - hitlineY)
+
         if (dist < nearestDist) {
             nearestDist = dist
             nearestI = i
@@ -165,9 +170,31 @@ document.addEventListener("keyup", (event) => {
     }
 })
 
+document.getElementById("generate").addEventListener("click", () => {
+    noteMap = []
+    generateMap(100, true)
+
+    score = 0
+    misses = 0
+    combo = 0
+    highestCombo = 0
+    accuracyReal = 100
+    accuracy = 100
+    grade = "?"
+    hitNotes = 0
+    missedNotes = 0
+    totalNotes = 0
+    updateStats()
+})
+
+document.getElementById("pause").addEventListener("click", () => {
+    stopped = !stopped
+    animate()
+})
+
 // NOTES
 
-const noteMap = [
+let noteMap = [
     // { x: 100, y: 0, radius: 45, color: circleColor, key: "a"},
     // { x: 300, y: -100, radius: 45, color: circleColor, key: "k"},
     // { x: 200, y: -200, radius: 45, color: circleColor, key: "s"},
@@ -175,17 +202,30 @@ const noteMap = [
     // { x: 400, y: -400, radius: 45, color: circleColor, key: "l"},
 ]
 
-function generateMap(amount) {
+function generateMap(amount, limit) {
+    let lastKeys = []
     const keyArr = ["a", "s", "k", "l"]
     for (let i = 0; i < amount; i++) {
         let x = Math.floor(Math.random() * 4) * 100 + 100
         let y = (-i*100) + (50 ? Math.random() < 0.25 : 0)
         let key = keyArr[(x/100)-1]
+
+        if (lastKeys.length > 2 && limit) { // this makes it so you cant get 3 notes in a row in the same column, you can turn it off with limit
+            if (lastKeys[i-1] === key && lastKeys[i-2] === key) {
+                let lastX = x
+                do {
+                    x = Math.floor(Math.random() * 4) * 100 + 100
+                } while (x === lastX)
+                key = keyArr[(x/100)-1]
+            }
+        }
+
+        lastKeys.push(key)
         noteMap.push({ x: x, y: y, radius: 45, color: circleColor, key: key})
     }
 }
 
-generateMap(100) // generates random map with n notes, you can map notes manually but good luck with that buddy
+generateMap(100, true) // generates random map with n notes, you can map notes manually but good luck with that buddy
 
 function drawNotes() {
     for (let note of noteMap) {
@@ -235,7 +275,9 @@ function animate() {
     drawASKL()
     drawNotes()
 
-    requestAnimationFrame(animate)
+    if (!stopped) {
+        requestAnimationFrame(animate)
+    }
 }
 
 // canvas width: 500, height: 900
