@@ -32,6 +32,9 @@ const outlineColor = "rgb(80, 8, 76)"
 
 // settings
 let noteSpeed = 10
+let noteSpeedQuery = 10
+let noteAmount = 100
+let doubleNotes = true
 
 const ASKL = [
     { x: 100, y: 850, radius: 45, color: circleColor},
@@ -172,7 +175,8 @@ document.addEventListener("keyup", (event) => {
 
 document.getElementById("generate").addEventListener("click", () => {
     noteMap = []
-    generateMap(100, true)
+    noteSpeed = noteSpeedQuery
+    generateMap(noteAmount, doubleNotes)
 
     score = 0
     misses = 0
@@ -193,6 +197,27 @@ document.getElementById("pause").addEventListener("click", () => {
     animate()
 })
 
+const noteSpeedInput = document.getElementById("noteSpeed")
+noteSpeedInput.addEventListener("input", () => {
+    let value = Number(noteSpeedInput.value)
+    if (!isNaN(value) && value >= 1) {
+        noteSpeedQuery = value
+    }
+})
+
+const noteAmountInput = document.getElementById("noteAmount")
+noteAmountInput.addEventListener("input", () => {
+    let value = Number(noteAmountInput.value)
+    if (!isNaN(value) && value >= 0) {
+        noteAmount = value
+    }
+})
+
+const doubleNotesInput = document.getElementById("doubleNotes")
+doubleNotesInput.addEventListener("change", () => {
+    doubleNotes = doubleNotesInput.checked
+})
+
 // NOTES
 
 let noteMap = [
@@ -203,7 +228,7 @@ let noteMap = [
     // { x: 400, y: -400, radius: 45, color: circleColor, key: "l"},
 ]
 
-function generateMap(amount, limit) {
+function generateMap(amount, doubleNotes) {
     let lastKeys = []
     const keyArr = ["a", "s", "k", "l"]
     for (let i = 0; i < amount; i++) {
@@ -211,8 +236,16 @@ function generateMap(amount, limit) {
         let y = (-i*100) + (50 ? Math.random() < 0.25 : 0)
         let key = keyArr[(x/100)-1]
 
-        if (lastKeys.length > 2 && limit) { // this makes it so you cant get 3 notes in a row in the same column, you can turn it off with limit
+        if (lastKeys.length > 2 && doubleNotes) { // this makes it so you cant get 3 notes in a row in the same column
             if (lastKeys[i-1] === key && lastKeys[i-2] === key) {
+                let lastX = x
+                do {
+                    x = Math.floor(Math.random() * 4) * 100 + 100
+                } while (x === lastX)
+                key = keyArr[(x/100)-1]
+            }
+        } else if (lastKeys.length > 1) { // no double notes
+            if (lastKeys[i-1] === key) {
                 let lastX = x
                 do {
                     x = Math.floor(Math.random() * 4) * 100 + 100
@@ -226,7 +259,7 @@ function generateMap(amount, limit) {
     }
 }
 
-generateMap(100, true) // generates random map with n notes, you can map notes manually but good luck with that buddy
+generateMap(noteAmount, true) // generates random map with n notes, you can map notes manually but good luck with that buddy
 
 function drawNotes() {
     for (let note of noteMap) {

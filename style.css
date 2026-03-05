@@ -35,7 +35,7 @@ button:hover {
     display: flex;
     flex-direction: column;
     left: 5%;
-    bottom: 50%;
+    bottom: 40%;
     gap: 3em;
 }
 
@@ -45,7 +45,7 @@ button:hover {
     gap: 5px;
 }
 
-.buttons {
+.settings {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -83,4 +83,47 @@ button:hover {
 #grade {
     color: white;
     font-size: 32px;
+}
+
+#controls {
+    position: absolute;
+    color: white;
+    font-size: 32px;
+    left: 5%;
+    bottom: 5%;
+}
+
+#noteSpeedLabel {
+    color: white;
+    font-weight: bold;
+}
+
+#noteSpeed {
+    background-color: rgb(248, 204, 255);
+    border: solid 1px rgb(119, 18, 133);
+    width: 75px;
+    border-radius: 5px;
+}
+
+#noteAmountLabel {
+    color: white;
+    font-weight: bold;
+}
+
+#noteAmount {
+    background-color: rgb(248, 204, 255);
+    border: solid 1px rgb(119, 18, 133);
+    width: 75px;
+    border-radius: 5px;
+}
+
+#doubleNotesLabel {
+    color: white;
+    font-weight: bold;
+}
+
+#doubleNotes {
+    width: 15px;
+    height: 15px;
+    margin: 0;
 }
